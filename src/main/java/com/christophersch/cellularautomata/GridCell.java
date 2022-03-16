@@ -1,21 +1,20 @@
 package com.christophersch.cellularautomata;
 
-import com.christophersch.cellularautomata.Cells.Cell;
 import javafx.scene.paint.Color;
 
 public class GridCell {
     int x;
     int y;
-    Cell cell_type;
+    int cell_id;
 
-    public GridCell(int x, int y, Cell cell_type) {
+    public GridCell(int x, int y, int cell_id) {
         this.x = x;
         this.y = y;
-        this.cell_type = cell_type;
+        this.cell_id = cell_id;
     }
 
     public Color getColor() {
-        return cell_type.cell_color;
+        return Grid.rule_set.getColor(cell_id);
     }
 
     public int getX() { return x; }
