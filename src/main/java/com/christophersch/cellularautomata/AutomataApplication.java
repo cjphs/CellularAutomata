@@ -11,10 +11,13 @@ import java.util.List;
 
 public class AutomataApplication extends Application {
 
+    AutomataGUI gui;
     AnimationTimer loop;
 
-    static AutomataGUI gui;
+    // How many times per second should logic updates & redraws happen
+    final static int FPS = 60;
 
+    // List of available rule sets
     public static ArrayList<String> rule_sets = new ArrayList<>(
             List.of(
                 "Game of Life",
@@ -22,6 +25,7 @@ public class AutomataApplication extends Application {
             )
     );
 
+    // Bind rule sets to respective objects
     void setRules(String rule_selection) {
         switch(rule_selection) {
             case "Game of Life" -> Grid.setRuleSet(new GameOfLife());
@@ -32,8 +36,6 @@ public class AutomataApplication extends Application {
         Grid.resetGrid();
         Grid.rule_set.initializeGrid();
     }
-
-    final static int FPS = 60;
 
     @Override
     public void start(Stage stage) {
@@ -54,6 +56,7 @@ public class AutomataApplication extends Application {
                 // display
                 gui.drawGrid();
 
+                // sleep, repeat
                 try {
                     Thread.sleep(1000/FPS);
                 } catch (InterruptedException e) {
@@ -75,19 +78,16 @@ public class AutomataApplication extends Application {
         Grid.paused = true;
     }
 
+    private void unpause() {
+        Grid.paused = false;
+    }
+
     void pauseUnpause() {
         if (Grid.paused)
             unpause();
         else
             pause();
     }
-
-    private void unpause() {
-        Grid.paused = false;
-    }
-
-
-
 
     public static void main(String[] args) {
         launch();

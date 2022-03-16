@@ -1,10 +1,10 @@
 package com.christophersch.cellularautomata;
 
-import com.christophersch.cellularautomata.Rulesets.Ruleset;
+import com.christophersch.cellularautomata.Rulesets.RuleSet;
 import javafx.scene.input.MouseButton;
 
 public class Grid {
-
+    // How many states have been processed so far?
     public static int ticks = 0;
 
     public static boolean paused = true;
@@ -14,7 +14,7 @@ public class Grid {
     static boolean mouse_down = false;
     static MouseButton mouse_button = MouseButton.PRIMARY;
 
-    static Ruleset rule_set;
+    static RuleSet rule_set;
 
     static int grid_width = 100;
     static int grid_height = 100;
@@ -23,7 +23,7 @@ public class Grid {
     public static int[][] grid = new int[grid_width][grid_height];
     static int[][] next_grid = new int[grid_width][grid_height];
 
-    public static void setRuleSet(Ruleset rules) {
+    public static void setRuleSet(RuleSet rules) {
         rule_set = rules;
         rule_set.initializeGrid();
     }

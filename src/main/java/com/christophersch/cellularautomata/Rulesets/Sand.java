@@ -3,7 +3,7 @@ package com.christophersch.cellularautomata.Rulesets;
 import com.christophersch.cellularautomata.Grid;
 import javafx.scene.paint.Color;
 
-public class Sand implements Ruleset {
+public class Sand implements RuleSet {
     public void initializeGrid() {
         Grid.fillGrid(0);
 

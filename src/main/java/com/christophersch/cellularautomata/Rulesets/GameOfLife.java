@@ -3,7 +3,7 @@ package com.christophersch.cellularautomata.Rulesets;
 import com.christophersch.cellularautomata.Grid;
 import javafx.scene.paint.Color;
 
-public class GameOfLife implements Ruleset {
+public class GameOfLife implements RuleSet {
 
     // Empty grid
     public void initializeGrid() {}
