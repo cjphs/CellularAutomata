@@ -1,7 +1,6 @@
 package com.christophersch.cellularautomata;
 
-import com.christophersch.cellularautomata.Rulesets.GameOfLife;
-import com.christophersch.cellularautomata.Rulesets.Sand;
+import com.christophersch.cellularautomata.Rulesets.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -16,12 +15,14 @@ public class AutomataApplication extends Application {
 
     // How many times per second should logic updates & redraws happen
     final static int FPS = 60;
+    final static String application_title = "Automaton";
 
     // List of available rule sets
     public static ArrayList<String> rule_sets = new ArrayList<>(
             List.of(
                 "Game of Life",
-                "Sand"
+                "Sand",
+                "Brian's Brain"
             )
     );
 
@@ -30,6 +31,7 @@ public class AutomataApplication extends Application {
         switch(rule_selection) {
             case "Game of Life" -> Grid.setRuleSet(new GameOfLife());
             case "Sand" -> Grid.setRuleSet(new Sand());
+            case "Brian's Brain" -> Grid.setRuleSet(new BriansBrain());
         }
 
         pause();

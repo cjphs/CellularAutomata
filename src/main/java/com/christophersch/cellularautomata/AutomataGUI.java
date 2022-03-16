@@ -47,7 +47,7 @@ public class AutomataGUI {
 
         var scene = new Scene(contents, 800, 800, Color.WHITESMOKE);
 
-        stage.setTitle("Lines");
+        stage.setTitle(AutomataApplication.application_title);
         stage.setScene(scene);
         stage.show();
 
@@ -77,8 +77,10 @@ public class AutomataGUI {
         });
 
         pause_button = new Button("Play");
-        pause_button.setOnAction(e ->
-                parent_application.pauseUnpause()
+        pause_button.setOnAction(e -> {
+                parent_application.pauseUnpause();
+                pause_button.setText(Grid.paused ? "Play" : "Pause");
+            }
         );
 
         reset_button = new Button("Reset");

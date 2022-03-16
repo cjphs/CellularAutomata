@@ -9,12 +9,9 @@ public class GameOfLife implements RuleSet {
     public void initializeGrid() {}
 
     // Colors of each cell type (index of array = id)
-    private final Color[] colors = {
-            Color.WHITE,
-            Color.BLUE
-    };
+
     public Color getColor(int cell_id) {
-        return (colors[cell_id]);
+        return (cell_id == 1 ? Color.WHITE : Color.BLACK);
     }
 
     // Update rules (https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Rules)
