@@ -3,11 +3,7 @@ package com.christophersch.cellularautomata;
 import com.christophersch.cellularautomata.Rulesets.Ruleset;
 import javafx.scene.input.MouseButton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class Grid {
-    static Grid grid_instance;
 
     public static int ticks = 0;
 
@@ -19,9 +15,6 @@ public class Grid {
     static MouseButton mouse_button = MouseButton.PRIMARY;
 
     static Ruleset rule_set;
-
-    // stores the individual cells (quick access)
-    static ArrayList<GridCell> cells = new ArrayList<GridCell>();
 
     static int grid_width = 100;
     static int grid_height = 100;
@@ -67,7 +60,7 @@ public class Grid {
             }
 
             ticks++;
-        };
+        }
 
 
     }
@@ -79,11 +72,6 @@ public class Grid {
                 setCell(x,y,cell);
             }
         }
-    }
-
-    // Removes a cell at specific coordinates
-    public static void deleteCell(int x, int y) {
-        next_grid[x][y] = 0;
     }
 
     // Creates a new cell in the next generation
@@ -132,17 +120,5 @@ public class Grid {
         }
 
         return count;
-    }
-
-    public static ArrayList<GridCell> getCells() {
-        return cells;
-    }
-
-    public static boolean cellsAdjacent(int x, int y, GridCell cell2) {
-        return (
-                (Math.abs(x - cell2.x) == 1) && (Math.abs(y - cell2.y) == 1) ||
-                (Math.abs(x - cell2.x) == 0) && (Math.abs(y - cell2.y) == 1) ||
-                (Math.abs(x - cell2.x) == 1) && (Math.abs(y - cell2.y) == 0)
-            );
     }
 }

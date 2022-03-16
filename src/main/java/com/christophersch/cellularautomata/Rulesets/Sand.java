@@ -15,7 +15,7 @@ public class Sand implements Ruleset {
         Grid.setCell(50, 4, 3);
 
         Grid.fillRegion(10, 30, 30, 15, 2);
-    };
+    }
 
     public Color getColor(int cell_id) {
         return switch(cell_id) {
@@ -29,13 +29,10 @@ public class Sand implements Ruleset {
 
     public void updateRules(int cell_id, int x, int y) {
         switch (cell_id) {
-            case 0 -> {
+            case 0 -> {}
 
-            }
+            case 1 -> Grid.createCell(x,y,1);
 
-            case 1 -> {
-                Grid.createCell(x,y,1);
-            }
 
             case 2 -> {
                 // on ground
