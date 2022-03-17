@@ -3,16 +3,21 @@ package com.christophersch.cellularautomata;
 import com.christophersch.cellularautomata.RuleSets.RuleSet;
 import javafx.scene.input.MouseButton;
 
+import java.util.Random;
+
 public class Grid {
     // How many states have been processed so far?
-    public static int ticks = 0;
+    public static int generations = 0;
 
     public static boolean paused = true;
+
+    public static boolean unaltered = true;
 
     static int mouse_grid_x = 0;
     static int mouse_grid_y = 0;
     static boolean mouse_down = false;
     static MouseButton mouse_button = MouseButton.PRIMARY;
+    static int mouse_cell_selection = 1;
 
     static RuleSet rule_set;
 
@@ -31,7 +36,7 @@ public class Grid {
     public static void resetGrid() {
         grid = new int[grid_width][grid_height];
         next_grid = new int[grid_width][grid_height];
-        ticks = 0;
+        generations = 0;
     }
 
     public static void update() {
@@ -42,14 +47,16 @@ public class Grid {
         if (mouse_down && inBounds(mouse_grid_x,mouse_grid_y)) {
             if (mouse_button == MouseButton.PRIMARY)
                 //fillRegion(mouse_grid_x-1,mouse_grid_y-1,2,2,1);
-                setCell(mouse_grid_x,mouse_grid_y,1);
+                setCell(mouse_grid_x,mouse_grid_y,mouse_cell_selection);
             else if (mouse_button == MouseButton.SECONDARY)
                 setCell(mouse_grid_x,mouse_grid_y,0);
+            unaltered = false;
         }
 
         // Loop over the grid, update each cell accordingly
 
         if (!paused) {
+            unaltered = false;
             for (int x = 0; x < grid_width; x++) {
                 for (int y = 0; y < grid_height; y++) {
                     rule_set.updateRules(grid[x][y], x, y);
@@ -62,7 +69,7 @@ public class Grid {
 
             rule_set.updateCA();
 
-            ticks++;
+            generations++;
         }
 
 
@@ -103,12 +110,24 @@ public class Grid {
     public static void fillRegion(int x, int y, int w, int h, int cells) {
         for(int xx = 0; xx < w; xx++) {
             for(int yy = 0; yy < h; yy++) {
-                if (inBounds(x+xx,y+yy))
-                    grid[x + xx][y + yy] = cells;
+                setCell(x+xx,y+yy,cells);
             }
         }
     }
 
+    public static void fillRegionRandom(int x, int y, int w, int h, int cells) {
+        for(int xx = 0; xx < w; xx++) {
+            for(int yy = 0; yy < h; yy++) {
+                Random rand = new Random(); //instance of random class
+                int int_random = rand.nextInt(2);
+                setCell(x+xx,y+yy,int_random);
+            }
+        }
+    }
+
+    public static int getGenerations() {
+        return generations;
+    }
 
     public static int getNeighborCount(int x, int y, int cell_type) {
         int count = 0;

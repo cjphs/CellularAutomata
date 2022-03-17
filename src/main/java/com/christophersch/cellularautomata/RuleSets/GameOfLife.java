@@ -4,6 +4,10 @@ import com.christophersch.cellularautomata.Grid;
 import javafx.scene.paint.Color;
 
 public class GameOfLife implements RuleSet {
+    @Override
+    public int getMaxCellID() {
+        return 1;
+    }
 
     // Empty grid
     public void initializeGrid() {}

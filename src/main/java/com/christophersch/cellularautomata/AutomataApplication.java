@@ -3,6 +3,7 @@ package com.christophersch.cellularautomata;
 import com.christophersch.cellularautomata.RuleSets.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.control.Spinner;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class AutomataApplication extends Application {
 
-    AutomataGUI gui;
+    static AutomataGUI gui;
     AnimationTimer loop;
 
     // How many times per second should logic updates & redraws happen
@@ -20,9 +21,9 @@ public class AutomataApplication extends Application {
     // List of available rule sets
     public static ArrayList<String> rule_sets = new ArrayList<>(
             List.of(
+                "Brian's Brain",
                 "Game of Life",
                 "Sand",
-                "Brian's Brain",
                 "Rule 22",
                 "Rule 30"
             )
@@ -41,17 +42,28 @@ public class AutomataApplication extends Application {
         pause();
         Grid.resetGrid();
         Grid.rule_set.initializeGrid();
+        gui.cell_selection_combobox.getItems().clear();
+        gui.cell_selection_preview.setFill(Grid.rule_set.getColor(Grid.mouse_cell_selection));
+
+        ArrayList<Integer> cell_ids = new ArrayList<>();
+        for(int i = 1; i < Grid.rule_set.getMaxCellID()+1; i++) {
+            cell_ids.add(i);
+        }
+        gui.cell_selection_combobox.getItems().addAll(cell_ids);
+        gui.cell_selection_combobox.setValue(1);
     }
 
     @Override
     public void start(Stage stage) {
         initLogic();
         initGUI(stage);
+
+        setRules(rule_sets.get(0));
+        pause();
     }
 
     // Initialize everything relevant to the logic
     public void initLogic() {
-        setRules(rule_sets.get(0));
 
         // Main update loop
         loop = new AnimationTimer() {
@@ -71,8 +83,6 @@ public class AutomataApplication extends Application {
             }
         };
 
-        pause();
-
         loop.start();
     }
 
@@ -80,12 +90,14 @@ public class AutomataApplication extends Application {
         gui = new AutomataGUI(stage, this);
     }
 
-    private void pause() {
+    void pause() {
         Grid.paused = true;
+        gui.pause_button.setGraphic(gui.play_icon);
     }
 
     private void unpause() {
         Grid.paused = false;
+        gui.pause_button.setGraphic(gui.pause_icon);
     }
 
     void pauseUnpause() {
@@ -93,6 +105,8 @@ public class AutomataApplication extends Application {
             unpause();
         else
             pause();
+
+        gui.pause_button.setGraphic(Grid.paused ? gui.play_icon : gui.pause_icon);
     }
 
     public static void main(String[] args) {

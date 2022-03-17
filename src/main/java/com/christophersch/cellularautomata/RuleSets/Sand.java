@@ -4,6 +4,11 @@ import com.christophersch.cellularautomata.Grid;
 import javafx.scene.paint.Color;
 
 public class Sand implements RuleSet {
+    @Override
+    public int getMaxCellID() {
+        return 3;
+    }
+
     public void initializeGrid() {
         Grid.fillGrid(0);
 
@@ -58,7 +63,7 @@ public class Sand implements RuleSet {
             case 3 -> {
                 Grid.createCell(x,y,3);
 
-                if ((Grid.ticks % 60 > 30))
+                if ((Grid.generations % 60 > 30))
                     Grid.createCell(x,y+1,2);
             }
         }

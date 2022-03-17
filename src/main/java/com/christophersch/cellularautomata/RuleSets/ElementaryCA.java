@@ -4,6 +4,11 @@ import com.christophersch.cellularautomata.Grid;
 import javafx.scene.paint.Color;
 
 public abstract class ElementaryCA implements RuleSet {
+    @Override
+    public int getMaxCellID() {
+        return 1;
+    }
+
     int elementary_y = 0;
 
     public void initializeGrid() {
@@ -28,7 +33,7 @@ public abstract class ElementaryCA implements RuleSet {
     }
 
     public void updateCA() {
-        if (Grid.ticks > 96) {
+        if (Grid.generations > 96) {
             for (int x = 0; x < Grid.grid_height; x++) {
                 System.arraycopy(Grid.grid[x], 1, Grid.grid[x], 0, Grid.grid_height - 1);
             }

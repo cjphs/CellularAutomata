@@ -5,6 +5,11 @@ import javafx.scene.paint.Color;
 
 public class BriansBrain implements RuleSet {
     @Override
+    public int getMaxCellID() {
+        return 2;
+    }
+
+    @Override
     public void initializeGrid() {
         Grid.setCell(49,49,1);
         Grid.setCell(50,49,1);
