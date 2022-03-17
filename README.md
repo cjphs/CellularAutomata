@@ -21,3 +21,4 @@ Of course, an application such as this one could be improved in various domains:
 - Larger grids (perhaps even "infinitely many" grids through chunks)
 - Zooming in and out (for observing the behaviour of certain configurations & precise grid editing)
 - User-friendly way to define rule sets (for example through a TXT file with the rules encoded in a precise way)
+Alas, since this project was developed as an exercise in JavaFX, these features can wait :)
