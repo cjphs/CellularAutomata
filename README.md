@@ -8,7 +8,7 @@ Automaton is a simple program for processing & visualizing rules of 2D (and limi
 
 
 ## Rule Sets
-Each CA is defined as a **Rule Set**, which defines both the colours used by different cell types, as well as the rules used for updating the grid at each time step. As of now, the program has the following rule sets:
+Each CA is defined as a **Rule Set**, which specifies both the colours used by different cell types, as well as the rules used for updating the grid at each time step. As of now, the program has the following rule sets:
 - John Conway's "Game of Life" (https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
 - Brian Silverman's "Brain" (https://en.wikipedia.org/wiki/Brian%27s_Brain)
 - Sand simulation
