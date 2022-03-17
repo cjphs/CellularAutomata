@@ -1,4 +1,5 @@
 # Automaton
+![Lines of code](https://img.shields.io/tokei/lines/github/christophersch/CellularAutomata)
 *The millionth billionth cellular automata project on Github!*
 
 Automaton is a simple program for processing & visualizing rules of cellular automata (CA) in a 100x100 grid. The grid represents a CA's state at a particular instance of time. Each cell within the grid follows an update rule to determine what happens in the next state, usually depending on the state of its neighboring cells. For instance, if a "dead" cell is neighbored by two "alive" cells, the dead cell may become alive as though it were the offspring of the two alive cells. In some cases, this leads to very interesting behaviours.
