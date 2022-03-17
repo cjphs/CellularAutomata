@@ -1,4 +1,4 @@
-package com.christophersch.cellularautomata.Rulesets;
+package com.christophersch.cellularautomata.RuleSets;
 
 import com.christophersch.cellularautomata.Grid;
 import javafx.scene.paint.Color;
@@ -32,5 +32,10 @@ public class GameOfLife implements RuleSet {
                     Grid.createCell(x,y,1);
             }
         }
+    }
+
+    @Override
+    public void updateCA() {
+
     }
 }

@@ -1,6 +1,6 @@
 package com.christophersch.cellularautomata;
 
-import com.christophersch.cellularautomata.Rulesets.RuleSet;
+import com.christophersch.cellularautomata.RuleSets.RuleSet;
 import javafx.scene.input.MouseButton;
 
 public class Grid {
@@ -17,11 +17,11 @@ public class Grid {
     static RuleSet rule_set;
 
     static int grid_width = 100;
-    static int grid_height = 100;
+    public static int grid_height = 100;
 
     // stores the actual 2D grid of cells
     public static int[][] grid = new int[grid_width][grid_height];
-    static int[][] next_grid = new int[grid_width][grid_height];
+    public static int[][] next_grid = new int[grid_width][grid_height];
 
     public static void setRuleSet(RuleSet rules) {
         rule_set = rules;
@@ -31,6 +31,7 @@ public class Grid {
     public static void resetGrid() {
         grid = new int[grid_width][grid_height];
         next_grid = new int[grid_width][grid_height];
+        ticks = 0;
     }
 
     public static void update() {
@@ -58,6 +59,8 @@ public class Grid {
             for (int x = 0; x < grid_width; x++) {
                 if (grid_height >= 0) System.arraycopy(next_grid[x], 0, grid[x], 0, grid_height);
             }
+
+            rule_set.updateCA();
 
             ticks++;
         }

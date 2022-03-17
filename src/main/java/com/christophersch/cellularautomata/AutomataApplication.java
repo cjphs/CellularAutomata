@@ -1,6 +1,6 @@
 package com.christophersch.cellularautomata;
 
-import com.christophersch.cellularautomata.Rulesets.*;
+import com.christophersch.cellularautomata.RuleSets.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -22,7 +22,9 @@ public class AutomataApplication extends Application {
             List.of(
                 "Game of Life",
                 "Sand",
-                "Brian's Brain"
+                "Brian's Brain",
+                "Rule 22",
+                "Rule 30"
             )
     );
 
@@ -32,6 +34,8 @@ public class AutomataApplication extends Application {
             case "Game of Life" -> Grid.setRuleSet(new GameOfLife());
             case "Sand" -> Grid.setRuleSet(new Sand());
             case "Brian's Brain" -> Grid.setRuleSet(new BriansBrain());
+            case "Rule 22" -> Grid.setRuleSet(new ElementaryRule22());
+            case "Rule 30" -> Grid.setRuleSet(new ElementaryRule30());
         }
 
         pause();

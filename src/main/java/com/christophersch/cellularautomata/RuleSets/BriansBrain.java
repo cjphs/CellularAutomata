@@ -1,4 +1,4 @@
-package com.christophersch.cellularautomata.Rulesets;
+package com.christophersch.cellularautomata.RuleSets;
 
 import com.christophersch.cellularautomata.Grid;
 import javafx.scene.paint.Color;
@@ -40,5 +40,10 @@ public class BriansBrain implements RuleSet {
             case 1 -> Grid.createCell(x,y,2);
 
         }
+    }
+
+    @Override
+    public void updateCA() {
+
     }
 }
