@@ -3,7 +3,6 @@
 
 Automaton is a simple program for processing & visualizing rules of cellular automata (CA) in a 100x100 grid.
 
-
 <p align="center">
 
   
@@ -16,3 +15,9 @@ Each CA is defined as a **Rule Set**, which defines both the colours used by dif
 - John Conway's "Game of Life" (https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
 - Brian Silverman's "Brain" (https://en.wikipedia.org/wiki/Brian%27s_Brain)
 - Sand simulation
+
+## Future work
+Of course, an application such as this one could be improved in various domains:
+- Larger grids (perhaps even "infinitely many" grids through chunks)
+- Zooming in and out (for observing the behaviour of certain configurations & precise grid editing)
+- User-friendly way to define rule sets (for example through a TXT file with the rules encoded in a precise way)
