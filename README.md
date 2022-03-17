@@ -14,6 +14,10 @@ Each CA is defined as a **Rule Set**, which defines both the colours used by dif
 - Brian Silverman's "Brain" (https://en.wikipedia.org/wiki/Brian%27s_Brain)
 - Sand simulation
 
+The program even has (limited) support for elementary cellular automata and comes with the following ECA rule sets:
+- Rule 22 (http://atlas.wolfram.com/01/01/22/)
+- Rule 30 (http://atlas.wolfram.com/01/01/30/. Automaton's implementation breaks quickly, but still pretty for the first few seconds...)
+
 ## Future work
 Of course, an application such as this one could be improved in various domains:
 - Larger grids (perhaps even "infinitely many" grids through chunks)
