@@ -1,5 +1,6 @@
 package com.christophersch.cellularautomata;
 
+import com.christophersch.cellularautomata.Utils.OutputWriter;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -33,17 +34,40 @@ public class AutomataGUI {
 
     ComboBox<String> rules_combobox;
 
-    ImageView play_icon;
-    ImageView pause_icon;
-    ImageView step_icon;
-
-    ComboBox<Integer> cell_selection_combobox;
+    ComboBox<String> cell_selection_combobox;
 
     Circle cell_selection_preview;
 
     Label generations_label;
 
     Button reset_button;
+
+    Button write_output_button;
+    OutputWriter output_writer;
+
+    ImageView play_icon     = loadImage("/play.png");
+    ImageView pause_icon    = loadImage("/pause.png");
+    ImageView step_icon     = loadImage("/step.png");
+
+    String text_output_button_begin = "Begin tracking output";
+    String text_output_button_stop = "Stop tracking & write to file";
+
+    String text_tooltip_pause_button = "Play/pause the simulation";
+    String text_tooltip_reset_button = "Reset the simulation. Resetting twice clears the CA's initial grid.";
+    String text_tooltip_rules_combobox = "Choose one of the available CAs";
+    String text_tooltip_step_button = "Simulate one step of the CA";
+    String text_tooltip_lighting_button = "Toggle top-down lighting";
+
+    String text_brush = "Brush:";
+    String text_lighting_checkbox = "Toggle lighting";
+    String text_reset_button = "Reset";
+
+    private void initializeGUI() {
+        output_writer = null;
+        write_output_button.setText(text_output_button_begin);
+
+        pause_button.setGraphic(play_icon);
+    }
 
     public AutomataGUI(Stage stage, AutomataApplication parent) {
         this.parent_application = parent;
@@ -57,28 +81,117 @@ public class AutomataGUI {
         bottom_bar.setPadding(new Insets(15, 12, 15, 12));
         bottom_bar.setPrefHeight(10);
 
+        write_output_button = new Button();
+        write_output_button.setOnAction(e -> {
+            if (output_writer == null) {
+                output_writer = new OutputWriter(parent_application);
+                write_output_button.setText(text_output_button_stop);
+            } else {
+                output_writer.writeCellCountsToFile();
+                output_writer.end();
+                output_writer = null;
+                write_output_button.setText(text_output_button_begin);
+            }
+        });
+
         generations_label = new Label();
         bottom_bar.getItems().add(generations_label);
 
-        contents = new VBox();
-
         canvas = new Canvas(100, 100);
 
+        rules_combobox = new ComboBox<>();
+        rules_combobox.getItems().addAll(AutomataApplication.rule_sets);
+        rules_combobox.setValue(AutomataApplication.rule_sets.get(0));
+        rules_combobox.setOnAction(e -> {
+            parent_application.setRules(rules_combobox.getValue());
+            initializeGUI();
+        });
+
+        pause_button = new Button();
+        pause_button.setOnAction(e -> parent_application.pauseUnpause()
+        );
+
+        step_button = new Button();
+        step_button.setGraphic(step_icon);
+        step_button.setOnAction(e -> {
+            Grid.paused = false;
+            Grid.update();
+            parent_application.pause();
+        });
+
+        reset_button = new Button(text_reset_button);
+        reset_button.setOnAction(e -> {
+            parent_application.pause();
+            Grid.resetGrid();
+            if (!Grid.unaltered) {
+                Grid.rule_set.initializeGrid();
+                Grid.unaltered = true;
+            }
+            initializeGUI();
+        });
+
+        lighting = new CheckBox(text_lighting_checkbox);
+        lighting.setSelected(false);
+
+
+        cell_selection_combobox = new ComboBox<>();
+        cell_selection_combobox.setOnAction(e -> {
+            if (cell_selection_combobox.getValue() != null){
+                String selected = cell_selection_combobox.getValue();
+                Grid.mouse_cell_selection = cell_selection_combobox.getItems().indexOf(selected) + 1;
+                cell_selection_preview.setFill(Grid.rule_set.getColor(Grid.mouse_cell_selection));
+            }
+        });
+
+        final Pane spacer = new Pane();
+        HBox.setHgrow(
+                spacer,
+                Priority.ALWAYS
+        );
+
+        cell_selection_preview = new Circle();
+        cell_selection_preview.setRadius(6);
+        cell_selection_preview.setStroke(Color.BLACK);
+        cell_selection_preview.setStrokeWidth(1);
+
+        top_bar.getItems().add(rules_combobox);
+        top_bar.getItems().add(reset_button);
+        top_bar.getItems().add(new Separator());
+        top_bar.getItems().add(pause_button);
+        top_bar.getItems().add(step_button);
+        top_bar.getItems().add(new Separator());
+        top_bar.getItems().add(new Label(text_brush));
+        top_bar.getItems().add(cell_selection_combobox);
+        top_bar.getItems().add(cell_selection_preview);
+        top_bar.getItems().add(new Separator());
+        top_bar.getItems().add(spacer);
+        top_bar.getItems().add(lighting);
+
+        bottom_bar.getItems().add(spacer);
+        bottom_bar.getItems().add(write_output_button);
+
+        pause_button.setTooltip(    new Tooltip(text_tooltip_pause_button)      );
+        reset_button.setTooltip(    new Tooltip(text_tooltip_reset_button)      );
+        step_button.setTooltip(     new Tooltip(text_tooltip_step_button)       );
+        rules_combobox.setTooltip(  new Tooltip(text_tooltip_rules_combobox)    );
+        lighting.setTooltip(        new Tooltip(text_tooltip_lighting_button)   );
+
+        contents = new VBox();
         contents.getChildren().addAll(top_bar, canvas, bottom_bar);
 
-        var scene = new Scene(contents, 800, 800, Color.GRAY);
+        Scene scene = new Scene(contents, 800, 800, Color.GRAY);
 
         stage.setTitle(AutomataApplication.application_title);
         stage.setScene(scene);
         stage.show();
 
-        rules_combobox = new ComboBox<>();
-        rules_combobox.getItems().addAll(AutomataApplication.rule_sets);
-        rules_combobox.setValue(AutomataApplication.rule_sets.get(0));
-        rules_combobox.setOnAction(e ->
-                parent_application.setRules(rules_combobox.getValue())
-        );
+        addMouseEvents(scene);
 
+        drawGrid();
+        initializeGUI();
+    }
+
+    private void addMouseEvents(Scene scene) {
         scene.addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
             int[] coords = translateMouseCoordinates(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             Grid.mouse_grid_x = coords[0];
@@ -96,86 +209,6 @@ public class AutomataGUI {
             Grid.mouse_grid_x = coords[0];
             Grid.mouse_grid_y = coords[1];
         });
-
-        play_icon = loadImage("/play.png");
-        pause_icon = loadImage("/pause.png");
-        step_icon = loadImage("/step.png");
-
-        pause_button = new Button();
-        pause_button.setGraphic(play_icon);
-
-        pause_button.setOnAction(e -> parent_application.pauseUnpause()
-        );
-
-        step_button = new Button();
-        step_button.setGraphic(step_icon);
-        step_button.setOnAction(e -> {
-            Grid.paused = false;
-            Grid.update();
-            parent_application.pause();
-        });
-
-        reset_button = new Button("Reset");
-        reset_button.setOnAction(e -> {
-            parent_application.pause();
-            Grid.resetGrid();
-            if (!Grid.unaltered) {
-                Grid.rule_set.initializeGrid();
-                Grid.unaltered = true;
-            }
-        });
-
-        lighting = new CheckBox("Top-down lighting");
-        lighting.setSelected(false);
-
-        final Pane leftSpacer = new Pane();
-        HBox.setHgrow(
-                leftSpacer,
-                Priority.ALWAYS
-        );
-
-        final Pane rightSpacer = new Pane();
-        HBox.setHgrow(
-                rightSpacer,
-                Priority.ALWAYS
-        );
-
-        cell_selection_combobox = new ComboBox<>();
-        cell_selection_combobox.getItems().add(1);
-        cell_selection_combobox.setOnAction(e -> {
-            if (cell_selection_combobox.getValue() != null){
-                Grid.mouse_cell_selection = cell_selection_combobox.getValue();
-                cell_selection_preview.setFill(Grid.rule_set.getColor(Grid.mouse_cell_selection));
-            }
-        });
-
-        cell_selection_combobox.setPrefWidth(10);
-
-        cell_selection_preview = new Circle();
-        cell_selection_preview.setRadius(6);
-        cell_selection_preview.setStroke(Color.BLACK);
-        cell_selection_preview.setStrokeWidth(1);
-
-        top_bar.getItems().add(rules_combobox);
-        top_bar.getItems().add(reset_button);
-        top_bar.getItems().add(new Separator());
-        top_bar.getItems().add(pause_button);
-        top_bar.getItems().add(step_button);
-        top_bar.getItems().add(new Separator());
-        top_bar.getItems().add(new Label("Brush:"));
-        top_bar.getItems().add(cell_selection_combobox);
-        top_bar.getItems().add(cell_selection_preview);
-        top_bar.getItems().add(new Separator());
-        top_bar.getItems().add(rightSpacer);
-        top_bar.getItems().add(lighting);
-
-        pause_button.setTooltip(new Tooltip("Plays/pauses the simulation"));
-        reset_button.setTooltip(new Tooltip("Resets the grid to the CA's initial state. Resetting twice clears the grid's initial configuration."));
-        step_button.setTooltip(new Tooltip("Simulates one step of the CA"));
-        rules_combobox.setTooltip(new Tooltip("The CA to be simulated"));
-        lighting.setTooltip(new Tooltip("When enabled, cells receive a shadow if they are beneath other cells"));
-
-        drawGrid();
     }
 
     private ImageView loadImage(String url) {

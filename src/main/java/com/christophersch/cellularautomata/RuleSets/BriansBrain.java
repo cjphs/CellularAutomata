@@ -4,21 +4,21 @@ import com.christophersch.cellularautomata.Grid;
 import javafx.scene.paint.Color;
 
 public class BriansBrain implements RuleSet {
+
+    // https://en.wikipedia.org/wiki/Brian%27s_Brain
     @Override
     public int getMaxCellID() {
         return 2;
     }
 
     @Override
-    public void initializeGrid() {
-        Grid.setCell(49,49,1);
-        Grid.setCell(50,49,1);
+    public String getName(int cell_id) {
+        return switch(cell_id) {
+            case 1 -> "Alive";
+            case 2 -> "Dying";
+            default -> "Dead";
+        };
     }
-
-    // https://en.wikipedia.org/wiki/Brian%27s_Brain
-    // 0 = dead
-    // 1 = on
-    // 2 = dying
 
     @Override
     public Color getColor(int cell_id) {
@@ -28,6 +28,14 @@ public class BriansBrain implements RuleSet {
             default -> Color.BLACK;
         };
     }
+
+    @Override
+    public void initializeGrid() {
+        Grid.setCell(49,49,1);
+        Grid.setCell(50,49,1);
+    }
+
+
 
     @Override
     public void updateRules(int cell_id, int x, int y) {

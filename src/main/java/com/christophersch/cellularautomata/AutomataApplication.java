@@ -1,9 +1,9 @@
 package com.christophersch.cellularautomata;
 
 import com.christophersch.cellularautomata.RuleSets.*;
+import com.christophersch.cellularautomata.Utils.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.scene.control.Spinner;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -45,12 +45,12 @@ public class AutomataApplication extends Application {
         gui.cell_selection_combobox.getItems().clear();
         gui.cell_selection_preview.setFill(Grid.rule_set.getColor(Grid.mouse_cell_selection));
 
-        ArrayList<Integer> cell_ids = new ArrayList<>();
+        ArrayList<String> cell_ids = new ArrayList<>();
         for(int i = 1; i < Grid.rule_set.getMaxCellID()+1; i++) {
-            cell_ids.add(i);
+            cell_ids.add(Grid.rule_set.getName(i));
         }
         gui.cell_selection_combobox.getItems().addAll(cell_ids);
-        gui.cell_selection_combobox.setValue(1);
+        gui.cell_selection_combobox.setValue(cell_ids.get(0));
     }
 
     @Override
@@ -71,8 +71,13 @@ public class AutomataApplication extends Application {
                 // update
                 Grid.update();
 
+                for(Observer obs : observers) {
+                    obs.update();
+                }
+
                 // display
                 gui.drawGrid();
+
 
                 // sleep, repeat
                 try {
@@ -108,6 +113,17 @@ public class AutomataApplication extends Application {
 
         gui.pause_button.setGraphic(Grid.paused ? gui.play_icon : gui.pause_icon);
     }
+
+    ArrayList<Observer> observers = new ArrayList<>();
+
+    public void attach(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void detach(Observer observer) {
+        observers.remove(observer);
+    }
+
 
     public static void main(String[] args) {
         launch();

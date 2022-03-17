@@ -3,6 +3,7 @@ package com.christophersch.cellularautomata;
 import com.christophersch.cellularautomata.RuleSets.RuleSet;
 import javafx.scene.input.MouseButton;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Grid {
@@ -27,6 +28,9 @@ public class Grid {
     // stores the actual 2D grid of cells
     public static int[][] grid = new int[grid_width][grid_height];
     public static int[][] next_grid = new int[grid_width][grid_height];
+
+    public static int active_cell_count = 0;
+    static ArrayList<Integer> active_cells = new ArrayList<>();
 
     public static void setRuleSet(RuleSet rules) {
         rule_set = rules;
@@ -56,6 +60,7 @@ public class Grid {
         // Loop over the grid, update each cell accordingly
 
         if (!paused) {
+            active_cell_count = 0;
             unaltered = false;
             for (int x = 0; x < grid_width; x++) {
                 for (int y = 0; y < grid_height; y++) {
@@ -68,6 +73,8 @@ public class Grid {
             }
 
             rule_set.updateCA();
+
+            active_cells.add(active_cell_count);
 
             generations++;
         }
@@ -86,8 +93,11 @@ public class Grid {
 
     // Creates a new cell in the next generation
     public static void createCell(int x, int y, int cell_id) {
-        if (inBounds(x,y))
+        if (inBounds(x,y)) {
+            if (cell_id != 0)
+                active_cell_count++;
             next_grid[x][y] = cell_id;
+        }
     }
 
     // Creates a cell in the current generation

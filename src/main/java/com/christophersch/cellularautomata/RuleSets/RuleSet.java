@@ -12,6 +12,9 @@ public interface RuleSet {
     // Different colours for each cell type
     Color getColor(int cell_id);
 
+    // Different cell names
+    String getName(int cell_id);
+
     // Main update rule
     void updateRules(int cell_id, int x, int y);
 

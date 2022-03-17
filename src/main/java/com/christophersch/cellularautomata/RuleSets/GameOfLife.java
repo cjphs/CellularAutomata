@@ -9,14 +9,18 @@ public class GameOfLife implements RuleSet {
         return 1;
     }
 
-    // Empty grid
-    public void initializeGrid() {}
+    @Override
+    public String getName(int cell_id) {
+        return (cell_id == 1 ? "Alive" : "Dead");
+    }
 
     // Colors of each cell type (index of array = id)
-
     public Color getColor(int cell_id) {
         return (cell_id == 1 ? Color.WHITE : Color.BLACK);
     }
+
+    // Empty grid
+    public void initializeGrid() {}
 
     // Update rules (https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Rules)
     public void updateRules(int cell_id, int x, int y) {

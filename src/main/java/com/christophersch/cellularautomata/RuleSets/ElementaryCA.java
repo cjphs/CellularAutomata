@@ -9,15 +9,21 @@ public abstract class ElementaryCA implements RuleSet {
         return 1;
     }
 
+    @Override
+    public String getName(int cell_id) {
+        return (cell_id == 1 ? "ON" : "OFF");
+    }
+
+    public Color getColor(int cell_id) {
+        return (cell_id == 1 ? Color.WHITE : Color.BLACK);
+    }
+
     int elementary_y = 0;
 
     public void initializeGrid() {
         Grid.setCell(50,0,1);
     }
 
-    public Color getColor(int cell_id) {
-        return (cell_id == 1 ? Color.WHITE : Color.BLACK);
-    }
 
     public void updateRules(int cell_id, int x, int y) {
 
